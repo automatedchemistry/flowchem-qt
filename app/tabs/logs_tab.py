@@ -1,10 +1,10 @@
 from PySide6.QtWidgets import (
-    QWidget,
-    QVBoxLayout,
     QHBoxLayout,
-    QPushButton,
     QPlainTextEdit,
+    QVBoxLayout,
+    QWidget,
 )
+from qfluentwidgets import PushButton
 from loguru import logger
 
 
@@ -13,7 +13,9 @@ class LogsTab(QWidget):
         super().__init__(parent)
         self.log_view = QPlainTextEdit(readOnly=True)
 
-        clear_btn = QPushButton("Clear")
+        clear_btn = PushButton("Clear")
+        self.log_view.setToolTip("Live FlowChem process output and GUI log events.")
+        clear_btn.setToolTip("Clear the displayed log output.")
         clear_btn.clicked.connect(self.log_view.clear)
 
         btn_row = QHBoxLayout()

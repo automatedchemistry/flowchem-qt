@@ -1,22 +1,13 @@
 from PySide6.QtCore import QUrl
 from PySide6.QtGui import QDesktopServices
 from PySide6.QtWidgets import (
-    QCheckBox,
     QFormLayout,
     QHBoxLayout,
-    QLineEdit,
     QMessageBox,
-    QPushButton,
     QVBoxLayout,
     QWidget,
 )
-
-_STYLE_START = (
-    "background-color: #4CAF50; color: white; font-weight: bold; padding: 6px 18px;"
-)
-_STYLE_STOP = (
-    "background-color: #f44336; color: white; font-weight: bold; padding: 6px 18px;"
-)
+from qfluentwidgets import CheckBox, LineEdit, PrimaryPushButton, PushButton
 
 
 class ServerTab(QWidget):
@@ -25,12 +16,18 @@ class ServerTab(QWidget):
         self._mgr = server_manager
         self._cfg = config_tab
 
-        self.address_edit = QLineEdit("http://localhost:8000")
-        self.debug_chk = QCheckBox("Debug mode")
-        self.sim_chk = QCheckBox("Simulation mode")
-        self.toggle_btn = QPushButton("Start")
-        self.toggle_btn.setStyleSheet(_STYLE_START)
-        open_btn = QPushButton("Open API browser")
+        self.address_edit = LineEdit()
+        self.address_edit.setText("http://localhost:8000")
+        self.debug_chk = CheckBox("Debug mode")
+        self.sim_chk = CheckBox("Simulation mode")
+        self.toggle_btn = PrimaryPushButton("Start")
+        open_btn = PushButton("Open API browser")
+
+        self.address_edit.setToolTip("Base URL for the running FlowChem server.")
+        self.debug_chk.setToolTip("Pass --debug to FlowChem for verbose logging.")
+        self.sim_chk.setToolTip("Launch flowchem-sim instead of real device drivers.")
+        self.toggle_btn.setToolTip("Start or stop the FlowChem server.")
+        open_btn.setToolTip("Open the server API documentation in your browser.")
 
         form = QFormLayout()
         form.addRow("Server address:", self.address_edit)
@@ -74,14 +71,14 @@ class ServerTab(QWidget):
 
     def _on_started(self):
         self.toggle_btn.setText("Stop")
-        self.toggle_btn.setStyleSheet(_STYLE_STOP)
+        self.toggle_btn.setToolTip("Stop the running FlowChem server.")
         self.address_edit.setEnabled(False)
         self.debug_chk.setEnabled(False)
         self.sim_chk.setEnabled(False)
 
     def _on_stopped(self, _exit_code):
         self.toggle_btn.setText("Start")
-        self.toggle_btn.setStyleSheet(_STYLE_START)
+        self.toggle_btn.setToolTip("Start the FlowChem server.")
         self.address_edit.setEnabled(True)
         self.debug_chk.setEnabled(True)
         self.sim_chk.setEnabled(True)

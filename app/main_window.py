@@ -9,7 +9,9 @@ from app.tabs.discover_tab import DiscoverTab
 from app.tabs.logs_tab import LogsTab
 from app.tabs.server_tab import ServerTab
 
-_ICON_PATH = Path(__file__).parent.parent / "resources" / "icons" / "flowchem_logo.svg"
+_ICON_PATH = (
+    Path(__file__).parent.parent / "resources" / "icons" / "flowchem_app_icon.ico"
+)
 
 
 class MainWindow(QMainWindow):
@@ -31,11 +33,17 @@ class MainWindow(QMainWindow):
         tabs.addTab(self.server_tab, "Server")
         tabs.addTab(self.discover_tab, "Discover")
         tabs.addTab(self.logs_tab, "Logs")
+        tabs.setTabToolTip(0, "Edit and save the FlowChem TOML configuration.")
+        tabs.setTabToolTip(1, "Start, stop, and open the FlowChem server API.")
+        tabs.setTabToolTip(2, "Detect connected devices and copy the generated config.")
+        tabs.setTabToolTip(3, "View FlowChem server output and GUI events.")
         self.setCentralWidget(tabs)
 
         self._status_dot = QLabel("● Server stopped")
+        self._status_dot.setToolTip("Current FlowChem server status.")
         self._status_dot.setStyleSheet("color: red;")
         status_bar = QStatusBar()
+        status_bar.setToolTip("Shows the latest FlowChem Manager status message.")
         status_bar.addWidget(self._status_dot)
         self.setStatusBar(status_bar)
 
@@ -51,6 +59,7 @@ class MainWindow(QMainWindow):
 
     def _on_started(self):
         self._status_dot.setText("● Server running")
+        self._status_dot.setToolTip("FlowChem server is running.")
         self._status_dot.setStyleSheet("color: green;")
         self.statusBar().showMessage("Server started", 3000)
         self.config_tab.setEnabled(False)
@@ -58,6 +67,7 @@ class MainWindow(QMainWindow):
 
     def _on_stopped(self, exit_code):
         self._status_dot.setText("● Server stopped")
+        self._status_dot.setToolTip("FlowChem server is stopped.")
         self._status_dot.setStyleSheet("color: red;")
         msg = (
             "Server stopped"

@@ -8,14 +8,19 @@ class TrayIcon(QSystemTrayIcon):
         super().__init__(icon, parent)
         self._window = window
         self._mgr = server_manager
+        self.setToolTip("Flowchem Manager")
 
         menu = QMenu()
-        menu.addAction("Show window", window.show)
+        act_show = menu.addAction("Show window", window.show)
+        act_show.setToolTip("Show the FlowChem Manager window.")
         menu.addSeparator()
         self._act_start = menu.addAction("Start server", self._start)
         self._act_stop = menu.addAction("Stop server", server_manager.stop)
+        self._act_start.setToolTip("Start the FlowChem server.")
+        self._act_stop.setToolTip("Stop the FlowChem server.")
         menu.addSeparator()
-        menu.addAction("Quit", QApplication.instance().quit)
+        act_quit = menu.addAction("Quit", QApplication.instance().quit)
+        act_quit.setToolTip("Quit FlowChem Manager.")
         self.setContextMenu(menu)
 
         self.activated.connect(self._on_activated)

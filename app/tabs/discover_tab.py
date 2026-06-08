@@ -3,10 +3,10 @@ from PySide6.QtWidgets import (
     QHBoxLayout,
     QMessageBox,
     QPlainTextEdit,
-    QPushButton,
     QVBoxLayout,
     QWidget,
 )
+from qfluentwidgets import PrimaryPushButton, PushButton
 from loguru import logger
 
 _WARNING = (
@@ -23,9 +23,13 @@ class DiscoverTab(QWidget):
         self._proc = QProcess(self)
 
         self.output = QPlainTextEdit(readOnly=True)
-        run_btn = QPushButton("Run autodiscover")
-        self.copy_btn = QPushButton("Copy to editor")
+        run_btn = PrimaryPushButton("Run autodiscover")
+        self.copy_btn = PushButton("Copy to editor")
         self.copy_btn.setEnabled(False)
+
+        self.output.setToolTip("Autodiscover output from stdout and stderr.")
+        run_btn.setToolTip("Run flowchem-autodiscover after confirming the warning.")
+        self.copy_btn.setToolTip("Copy autodiscover output into the Config editor.")
 
         btn_row = QHBoxLayout()
         btn_row.addWidget(run_btn)

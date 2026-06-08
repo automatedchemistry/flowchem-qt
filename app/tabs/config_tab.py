@@ -4,12 +4,11 @@ from PySide6.QtCore import QSettings
 from PySide6.QtWidgets import (
     QFileDialog,
     QHBoxLayout,
-    QLineEdit,
     QPlainTextEdit,
-    QPushButton,
     QVBoxLayout,
     QWidget,
 )
+from qfluentwidgets import LineEdit, PrimaryPushButton, PushButton
 from loguru import logger
 
 
@@ -18,11 +17,18 @@ class ConfigTab(QWidget):
         super().__init__(parent)
         self._settings = QSettings("flowchem", "gui")
 
-        self.path_edit = QLineEdit(placeholderText="Path to config.toml")
-        browse_btn = QPushButton("Browse")
-        load_btn = QPushButton("Load")
-        self.save_btn = QPushButton("Save")
+        self.path_edit = LineEdit()
+        self.path_edit.setPlaceholderText("Path to config.toml")
+        browse_btn = PushButton("Browse")
+        load_btn = PushButton("Load")
+        self.save_btn = PrimaryPushButton("Save")
         self.editor = QPlainTextEdit()
+
+        self.path_edit.setToolTip("Path to the FlowChem TOML configuration file.")
+        browse_btn.setToolTip("Select a FlowChem TOML configuration file.")
+        load_btn.setToolTip("Load the selected TOML file into the editor.")
+        self.save_btn.setToolTip("Save the editor contents to the selected TOML file.")
+        self.editor.setToolTip("Edit the raw FlowChem TOML configuration.")
 
         path_row = QHBoxLayout()
         path_row.addWidget(self.path_edit)
