@@ -13,7 +13,7 @@ class TrayIcon(QSystemTrayIcon):
         menu.addAction("Show window", window.show)
         menu.addSeparator()
         self._act_start = menu.addAction("Start server", self._start)
-        self._act_stop  = menu.addAction("Stop server", server_manager.stop)
+        self._act_stop = menu.addAction("Stop server", server_manager.stop)
         menu.addSeparator()
         menu.addAction("Quit", QApplication.instance().quit)
         self.setContextMenu(menu)

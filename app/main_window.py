@@ -21,16 +21,16 @@ class MainWindow(QMainWindow):
 
         self.server_manager = ServerManager(self)
 
-        self.config_tab   = ConfigTab()
-        self.server_tab   = ServerTab(self.server_manager, self.config_tab)
+        self.config_tab = ConfigTab()
+        self.server_tab = ServerTab(self.server_manager, self.config_tab)
         self.discover_tab = DiscoverTab(self.config_tab)
-        self.logs_tab     = LogsTab()
+        self.logs_tab = LogsTab()
 
         tabs = QTabWidget()
-        tabs.addTab(self.config_tab,   "Config editor")
-        tabs.addTab(self.server_tab,   "Server")
+        tabs.addTab(self.config_tab, "Config editor")
+        tabs.addTab(self.server_tab, "Server")
         tabs.addTab(self.discover_tab, "Discover")
-        tabs.addTab(self.logs_tab,     "Logs")
+        tabs.addTab(self.logs_tab, "Logs")
         self.setCentralWidget(tabs)
 
         self._status_dot = QLabel("● Server stopped")
@@ -59,7 +59,11 @@ class MainWindow(QMainWindow):
     def _on_stopped(self, exit_code):
         self._status_dot.setText("● Server stopped")
         self._status_dot.setStyleSheet("color: red;")
-        msg = "Server stopped" if exit_code == 0 else f"Server stopped (exit code {exit_code})"
+        msg = (
+            "Server stopped"
+            if exit_code == 0
+            else f"Server stopped (exit code {exit_code})"
+        )
         self.statusBar().showMessage(msg, 5000)
         self.config_tab.setEnabled(True)
         self.discover_tab.setEnabled(True)

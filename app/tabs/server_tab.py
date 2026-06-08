@@ -1,11 +1,22 @@
 from PySide6.QtCore import QUrl
 from PySide6.QtGui import QDesktopServices
 from PySide6.QtWidgets import (
-    QCheckBox, QFormLayout, QHBoxLayout, QLineEdit, QMessageBox, QPushButton, QVBoxLayout, QWidget,
+    QCheckBox,
+    QFormLayout,
+    QHBoxLayout,
+    QLineEdit,
+    QMessageBox,
+    QPushButton,
+    QVBoxLayout,
+    QWidget,
 )
 
-_STYLE_START = "background-color: #4CAF50; color: white; font-weight: bold; padding: 6px 18px;"
-_STYLE_STOP  = "background-color: #f44336; color: white; font-weight: bold; padding: 6px 18px;"
+_STYLE_START = (
+    "background-color: #4CAF50; color: white; font-weight: bold; padding: 6px 18px;"
+)
+_STYLE_STOP = (
+    "background-color: #f44336; color: white; font-weight: bold; padding: 6px 18px;"
+)
 
 
 class ServerTab(QWidget):
@@ -47,9 +58,15 @@ class ServerTab(QWidget):
         else:
             path = self._cfg.get_config_path()
             if not path:
-                QMessageBox.warning(self, "No config file", "Please select a config file in the Config editor tab before starting the server.")
+                QMessageBox.warning(
+                    self,
+                    "No config file",
+                    "Please select a config file in the Config editor tab before starting the server.",
+                )
                 return
-            self._mgr.start(path, debug=self.debug_chk.isChecked(), sim=self.sim_chk.isChecked())
+            self._mgr.start(
+                path, debug=self.debug_chk.isChecked(), sim=self.sim_chk.isChecked()
+            )
 
     def _open_browser(self):
         url = self.address_edit.text().rstrip("/") + "/docs"

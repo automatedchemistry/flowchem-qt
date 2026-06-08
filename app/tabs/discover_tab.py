@@ -1,6 +1,11 @@
 from PySide6.QtCore import QProcess
 from PySide6.QtWidgets import (
-    QHBoxLayout, QMessageBox, QPlainTextEdit, QPushButton, QVBoxLayout, QWidget,
+    QHBoxLayout,
+    QMessageBox,
+    QPlainTextEdit,
+    QPushButton,
+    QVBoxLayout,
+    QWidget,
 )
 from loguru import logger
 
@@ -43,7 +48,9 @@ class DiscoverTab(QWidget):
 
     def _run(self):
         reply = QMessageBox.warning(
-            self, "Warning", _WARNING,
+            self,
+            "Warning",
+            _WARNING,
             QMessageBox.StandardButton.Ok | QMessageBox.StandardButton.Cancel,
         )
         if reply != QMessageBox.StandardButton.Ok:

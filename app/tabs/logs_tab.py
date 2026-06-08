@@ -1,4 +1,10 @@
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QPlainTextEdit
+from PySide6.QtWidgets import (
+    QWidget,
+    QVBoxLayout,
+    QHBoxLayout,
+    QPushButton,
+    QPlainTextEdit,
+)
 from loguru import logger
 
 
@@ -18,7 +24,11 @@ class LogsTab(QWidget):
         layout.addWidget(self.log_view)
         layout.addLayout(btn_row)
 
-        logger.add(self._log_sink, level="DEBUG", format="{time:HH:mm:ss} | {level:<8} | {message}")
+        logger.add(
+            self._log_sink,
+            level="DEBUG",
+            format="{time:HH:mm:ss} | {level:<8} | {message}",
+        )
 
     def _log_sink(self, message):
         self._append(message.strip())

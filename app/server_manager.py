@@ -3,11 +3,11 @@ from loguru import logger
 
 _PROC_ERRORS = {
     QProcess.ProcessError.FailedToStart: "Failed to start — is 'flowchem' on your PATH?",
-    QProcess.ProcessError.Crashed:       "Process crashed unexpectedly",
-    QProcess.ProcessError.Timedout:      "Process timed out",
-    QProcess.ProcessError.WriteError:    "Write error communicating with process",
-    QProcess.ProcessError.ReadError:     "Read error communicating with process",
-    QProcess.ProcessError.UnknownError:  "Unknown process error",
+    QProcess.ProcessError.Crashed: "Process crashed unexpectedly",
+    QProcess.ProcessError.Timedout: "Process timed out",
+    QProcess.ProcessError.WriteError: "Write error communicating with process",
+    QProcess.ProcessError.ReadError: "Read error communicating with process",
+    QProcess.ProcessError.UnknownError: "Unknown process error",
 }
 
 

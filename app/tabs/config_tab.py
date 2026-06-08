@@ -2,7 +2,13 @@ from pathlib import Path
 
 from PySide6.QtCore import QSettings
 from PySide6.QtWidgets import (
-    QFileDialog, QHBoxLayout, QLineEdit, QPlainTextEdit, QPushButton, QVBoxLayout, QWidget,
+    QFileDialog,
+    QHBoxLayout,
+    QLineEdit,
+    QPlainTextEdit,
+    QPushButton,
+    QVBoxLayout,
+    QWidget,
 )
 from loguru import logger
 
@@ -44,7 +50,9 @@ class ConfigTab(QWidget):
         self.editor.setPlainText(text)
 
     def _browse(self):
-        path, _ = QFileDialog.getOpenFileName(self, "Select config file", "", "TOML files (*.toml)")
+        path, _ = QFileDialog.getOpenFileName(
+            self, "Select config file", "", "TOML files (*.toml)"
+        )
         if path:
             self.path_edit.setText(path)
 
