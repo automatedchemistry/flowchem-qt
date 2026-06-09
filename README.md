@@ -2,8 +2,6 @@
   <img src="resources/icons/flowchem_logo.svg" alt="FlowChem logo" width="400"/>
 </p>
 
-<h1 align="center">FlowChem GUI</h1>
-
 <p align="center">
   A desktop application to manage the <a href="https://github.com/automatedchemistry/flowchem">FlowChem</a> server — configure devices, control the server process, and auto-discover hardware, all from one window.
 </p>
