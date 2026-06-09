@@ -62,7 +62,7 @@ class DiscoverTab(QWidget):
         self.output.clear()
         self.copy_btn.setEnabled(False)
         logger.info("Running flowchem-autodiscover")
-        self._proc.start("flowchem-autodiscover", [])
+        self._proc.start("flowchem-autodiscover", ["--assume-yes"])
 
     def _append(self, data: bytes):
         text = data.decode(errors="replace").rstrip()

@@ -33,3 +33,4 @@ repos:
           - loguru>=0.7
         files: ^app/|^main\.py
         pass_filenames: false
+        args: [--ignore-missing-imports, app, main.py]

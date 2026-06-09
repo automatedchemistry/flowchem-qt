@@ -19,7 +19,7 @@ class TrayIcon(QSystemTrayIcon):
         self._act_start.setToolTip("Start the FlowChem server.")
         self._act_stop.setToolTip("Stop the FlowChem server.")
         menu.addSeparator()
-        act_quit = menu.addAction("Quit", QApplication.instance().quit)
+        act_quit = menu.addAction("Quit", QApplication.quit)
         act_quit.setToolTip("Quit FlowChem Manager.")
         self.setContextMenu(menu)
 
