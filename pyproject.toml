@@ -3,7 +3,7 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "flowchem-gui"
+name = "flowchem-qt"
 version = "0.0.1"
 requires-python = ">=3.11"
 dependencies = [
@@ -19,7 +19,7 @@ dependencies = [
 test = ["pytest"]
 
 [project.gui-scripts]
-flowchem-gui = "main:main"
+flowchem-qt = "main:main"
 
 [tool.setuptools]
 py-modules = ["main"]

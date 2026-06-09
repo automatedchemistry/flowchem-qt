@@ -23,7 +23,7 @@ def main():
 
     # pythonw suppresses the console — redirect stderr so crashes before the
     # Qt window appears are not silently swallowed.
-    log_path = Path.home() / ".flowchem-gui" / "error.log"
+    log_path = Path.home() / ".flowchem-qt" / "error.log"
     log_path.parent.mkdir(exist_ok=True)
     sys.stderr = open(log_path, "a", encoding="utf-8")
 
