@@ -11,6 +11,7 @@
 ## Requirements
 
 - Python ≥ 3.11
+- GUI runtime: PyQt5 and PyQt-Fluent-Widgets
 - FlowChem installed and available on `PATH` (activate your FlowChem virtualenv before launching)
 
 ## Installation
@@ -24,6 +25,10 @@ Or, to install from source:
 ```bash
 pip install -e .
 ```
+
+For development, use a fresh virtual environment when switching Qt bindings. The QFluentWidgets PyQt5, PyQt6, PySide2, and PySide6 packages all provide the same `qfluentwidgets` import package, so they should not be installed together.
+
+PyQt5 and PyQt-Fluent-Widgets are GPL/commercial-license runtime dependencies. The FlowChem Qt application license is unchanged, but downstream distribution should account for those dependency licenses.
 
 ## Usage
 

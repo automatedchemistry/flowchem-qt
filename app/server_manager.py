@@ -1,22 +1,22 @@
-from PySide6.QtCore import QObject, QProcess, QTimer, Signal
+from PyQt5.QtCore import QObject, QProcess, QTimer, pyqtSignal
 from loguru import logger
 
 _PROC_ERRORS = {
-    QProcess.ProcessError.FailedToStart: "Failed to start — is 'flowchem' on your PATH?",
-    QProcess.ProcessError.Crashed: "Process crashed unexpectedly",
-    QProcess.ProcessError.Timedout: "Process timed out",
-    QProcess.ProcessError.WriteError: "Write error communicating with process",
-    QProcess.ProcessError.ReadError: "Read error communicating with process",
-    QProcess.ProcessError.UnknownError: "Unknown process error",
+    QProcess.FailedToStart: "Failed to start — is 'flowchem' on your PATH?",
+    QProcess.Crashed: "Process crashed unexpectedly",
+    QProcess.Timedout: "Process timed out",
+    QProcess.WriteError: "Write error communicating with process",
+    QProcess.ReadError: "Read error communicating with process",
+    QProcess.UnknownError: "Unknown process error",
 }
 
 
 class ServerManager(QObject):
-    started = Signal()
-    stopped = Signal(int)
-    stdout_ready = Signal(str)
-    stderr_ready = Signal(str)
-    error = Signal(str)
+    started = pyqtSignal()
+    stopped = pyqtSignal(int)
+    stdout_ready = pyqtSignal(str)
+    stderr_ready = pyqtSignal(str)
+    error = pyqtSignal(str)
 
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -41,7 +41,7 @@ class ServerManager(QObject):
         QTimer.singleShot(3000, self._force_kill)
 
     def is_running(self) -> bool:
-        return self._proc.state() == QProcess.ProcessState.Running
+        return self._proc.state() == QProcess.Running
 
     def _force_kill(self):
         if self.is_running():

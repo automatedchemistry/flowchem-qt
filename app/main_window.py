@@ -1,5 +1,5 @@
-from PySide6.QtGui import QIcon
-from PySide6.QtWidgets import QLabel, QMainWindow, QMessageBox, QStatusBar, QTabWidget
+from PyQt5.QtGui import QIcon
+from PyQt5.QtWidgets import QLabel, QMainWindow, QMessageBox, QStatusBar, QTabWidget
 
 from app.server_manager import ServerManager
 from app.tabs.config_tab import ConfigTab

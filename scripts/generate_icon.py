@@ -5,9 +5,9 @@ import struct
 import sys
 from pathlib import Path
 
-from PySide6.QtCore import QBuffer, QByteArray, QIODevice, QRectF
-from PySide6.QtGui import QGuiApplication, QImage, QPainter
-from PySide6.QtSvg import QSvgRenderer
+from PyQt5.QtCore import QBuffer, QByteArray, QIODevice, QRectF
+from PyQt5.QtGui import QGuiApplication, QImage, QPainter
+from PyQt5.QtSvg import QSvgRenderer
 
 DEFAULT_SIZES = (16, 24, 32, 48, 64, 128, 256)
 DEFAULT_SVG = Path("resources/icons/flowchem_app_icon.svg")
@@ -15,18 +15,18 @@ DEFAULT_ICO = Path("resources/icons/flowchem_app_icon.ico")
 
 
 def render_svg_to_png_bytes(renderer: QSvgRenderer, size: int) -> bytes:
-    image = QImage(size, size, QImage.Format.Format_ARGB32_Premultiplied)
+    image = QImage(size, size, QImage.Format_ARGB32_Premultiplied)
     image.fill(0)
 
     painter = QPainter(image)
-    painter.setRenderHint(QPainter.RenderHint.Antialiasing, True)
-    painter.setRenderHint(QPainter.RenderHint.SmoothPixmapTransform, True)
+    painter.setRenderHint(QPainter.Antialiasing, True)
+    painter.setRenderHint(QPainter.SmoothPixmapTransform, True)
     renderer.render(painter, QRectF(0, 0, size, size))
     painter.end()
 
     data = QByteArray()
     buffer = QBuffer(data)
-    buffer.open(QIODevice.OpenModeFlag.WriteOnly)
+    buffer.open(QIODevice.WriteOnly)
     image.save(buffer, "PNG")
     return bytes(data)
 

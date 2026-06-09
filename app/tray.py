@@ -1,5 +1,5 @@
-from PySide6.QtGui import QIcon
-from PySide6.QtWidgets import QApplication, QMenu, QSystemTrayIcon
+from PyQt5.QtGui import QIcon
+from PyQt5.QtWidgets import QApplication, QMenu, QSystemTrayIcon
 from loguru import logger
 
 
@@ -34,7 +34,7 @@ class TrayIcon(QSystemTrayIcon):
             self.show()
 
     def _on_activated(self, reason):
-        if reason == QSystemTrayIcon.ActivationReason.DoubleClick:
+        if reason == QSystemTrayIcon.DoubleClick:
             self._window.show()
             self._window.raise_()
 

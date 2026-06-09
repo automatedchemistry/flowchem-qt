@@ -1,8 +1,8 @@
 import socket
 from urllib.parse import urlparse
 
-from PySide6.QtCore import QUrl
-from PySide6.QtWidgets import (
+from PyQt5.QtCore import QUrl
+from PyQt5.QtWidgets import (
     QFormLayout,
     QHBoxLayout,
     QMessageBox,

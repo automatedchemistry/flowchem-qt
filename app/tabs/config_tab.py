@@ -1,7 +1,7 @@
 from pathlib import Path
 
-from PySide6.QtCore import QSettings
-from PySide6.QtWidgets import (
+from PyQt5.QtCore import QSettings
+from PyQt5.QtWidgets import (
     QFileDialog,
     QHBoxLayout,
     QPlainTextEdit,

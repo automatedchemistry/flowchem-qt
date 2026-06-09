@@ -1,27 +1,16 @@
-import argparse
 import ctypes
 import sys
 from pathlib import Path
 
 from qfluentwidgets import Theme, setTheme, setThemeColor
-from PySide6.QtGui import QIcon
-from PySide6.QtWidgets import QApplication
+from PyQt5.QtGui import QIcon
+from PyQt5.QtWidgets import QApplication
 
+from app.cli import parse_args
 from app.main_window import MainWindow
 from app.tray import TrayIcon
 
 _APP_ID = "org.flowchem.gui"
-
-
-def _parse_args(argv: list[str]) -> tuple[argparse.Namespace, list[str]]:
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "--no-tray",
-        action="store_true",
-        help="Disable the system tray; closing the window exits the application.",
-    )
-    args, qt_args = parser.parse_known_args(argv[1:])
-    return args, [argv[0], *qt_args]
 
 
 def _set_windows_app_id():
@@ -32,7 +21,7 @@ def _set_windows_app_id():
 
 def main():
     _set_windows_app_id()
-    args, qt_argv = _parse_args(sys.argv)
+    args, qt_argv = parse_args(sys.argv)
 
     # pythonw suppresses the console — redirect stderr so crashes before the
     # Qt window appears are not silently swallowed.
@@ -56,7 +45,7 @@ def main():
     if not args.no_tray:
         TrayIcon(window, window.server_manager, tray_icon, app)
     window.show()
-    sys.exit(app.exec())
+    sys.exit(app.exec_())
 
 
 if __name__ == "__main__":

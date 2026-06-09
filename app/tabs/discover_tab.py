@@ -1,5 +1,5 @@
-from PySide6.QtCore import QProcess
-from PySide6.QtWidgets import (
+from PyQt5.QtCore import QProcess
+from PyQt5.QtWidgets import (
     QHBoxLayout,
     QMessageBox,
     QPlainTextEdit,
@@ -55,9 +55,9 @@ class DiscoverTab(QWidget):
             self,
             "Warning",
             _WARNING,
-            QMessageBox.StandardButton.Ok | QMessageBox.StandardButton.Cancel,
+            QMessageBox.Ok | QMessageBox.Cancel,
         )
-        if reply != QMessageBox.StandardButton.Ok:
+        if reply != QMessageBox.Ok:
             return
         self.output.clear()
         self.copy_btn.setEnabled(False)
