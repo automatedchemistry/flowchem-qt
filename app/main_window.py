@@ -1,5 +1,3 @@
-from pathlib import Path
-
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QLabel, QMainWindow, QMessageBox, QStatusBar, QTabWidget
 
@@ -9,16 +7,19 @@ from app.tabs.discover_tab import DiscoverTab
 from app.tabs.logs_tab import LogsTab
 from app.tabs.server_tab import ServerTab
 
-_ICON_PATH = (
-    Path(__file__).parent.parent / "resources" / "icons" / "flowchem_app_icon.ico"
-)
-
 
 class MainWindow(QMainWindow):
-    def __init__(self, parent=None):
+    def __init__(
+        self,
+        parent=None,
+        minimize_to_tray: bool = True,
+        window_icon: QIcon | None = None,
+    ):
         super().__init__(parent)
+        self._minimize_to_tray = minimize_to_tray
         self.setWindowTitle("FlowChem Manager")
-        self.setWindowIcon(QIcon(str(_ICON_PATH)))
+        if window_icon is not None:
+            self.setWindowIcon(window_icon)
         self.resize(900, 650)
 
         self.server_manager = ServerManager(self)
@@ -54,8 +55,11 @@ class MainWindow(QMainWindow):
         self.server_manager.stderr_ready.connect(self.logs_tab.append_process_output)
 
     def closeEvent(self, event):
-        event.ignore()
-        self.hide()
+        if self._minimize_to_tray:
+            event.ignore()
+            self.hide()
+            return
+        super().closeEvent(event)
 
     def _on_started(self):
         self._status_dot.setText("● Server running")

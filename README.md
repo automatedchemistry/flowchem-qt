@@ -28,8 +28,9 @@ pip install -e .
 ## Usage
 
 ```bash
-flowchem-qt        # launches silently (no console window on Windows)
-python main.py     # development / debug
+flowchem-qt              # launches silently with tray (no console window on Windows)
+flowchem-qt --no-tray    # launches silently without tray; closing the window exits
+python main.py           # development / debug
 ```
 
 ---
@@ -112,7 +113,9 @@ Live log viewer — always accessible, even while the server is running.
 
 ## System tray
 
-Closing the main window minimises to the system tray — the application keeps running in the background. Right-click the tray icon to access:
+By default, closing the main window minimises to the system tray — the application keeps running in the background. Launch with `flowchem-qt --no-tray` to disable the tray and make closing the window exit the application.
+
+Right-click the tray icon to access:
 
 | Menu item | Description |
 |---|---|
