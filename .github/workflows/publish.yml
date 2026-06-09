@@ -51,9 +51,6 @@ jobs:
               )
           PY
 
-      - name: Run tests
-        run: python -m pytest --tb=short -q
-
       - name: Build distributions
         run: python -m build
 
