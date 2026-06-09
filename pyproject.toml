@@ -15,6 +15,9 @@ dependencies = [
     "zeroconf>=0.149.7",
 ]
 
+[project.optional-dependencies]
+test = ["pytest"]
+
 [project.gui-scripts]
 flowchem-gui = "main:main"
 
