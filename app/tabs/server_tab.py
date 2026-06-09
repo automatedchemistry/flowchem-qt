@@ -74,7 +74,7 @@ class ServerTab(QWidget):
             if parsed.hostname in ("localhost", "127.0.0.1", "::1"):
                 ip = socket.gethostbyname(socket.gethostname())
                 base = base.replace(parsed.hostname, ip, 1)
-        except Exception:
+        except OSError:
             pass
         return base + "/docs"
 
