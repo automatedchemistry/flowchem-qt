@@ -157,6 +157,8 @@ class ConfigTab(QWidget):
         if not path:
             return None
         selected = Path(path)
+        if selected.exists() and selected.is_dir():
+            return selected
         if not selected.suffix:
             selected = selected.with_suffix(".toml")
         return selected

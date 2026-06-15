@@ -219,3 +219,5 @@ __marimo__/
 
 .claude/
 .flowchem-sim/
+.pre-commit-cache*
+pytest-cache*

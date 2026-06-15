@@ -27,9 +27,15 @@ class ServerManager(QObject):
         self._proc.finished.connect(self._on_finished)
         self._proc.errorOccurred.connect(self._on_error)
 
-    def start(self, config_path: str, debug: bool = False, sim: bool = False):
+    def start(
+        self,
+        config_path: str,
+        debug: bool = False,
+        sim: bool = False,
+        host: str = "127.0.0.1",
+    ):
         exe = "flowchem-sim" if sim else "flowchem"
-        args = [config_path] + (["--debug"] if debug else [])
+        args = [config_path, "--host", host] + (["--debug"] if debug else [])
         logger.info(f"Starting: {exe} {' '.join(args)}")
         self._proc.start(exe, args)
 
