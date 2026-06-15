@@ -21,9 +21,7 @@ def test_start_defaults_to_localhost_host():
 
     manager.start("config.toml")
 
-    assert proc.calls == [
-        ("flowchem", ["config.toml", "--host", "127.0.0.1"])
-    ]
+    assert proc.calls == [("flowchem", ["config.toml", "--host", "127.0.0.1"])]
 
 
 def test_start_can_expose_on_local_network():
@@ -31,9 +29,7 @@ def test_start_can_expose_on_local_network():
 
     manager.start("config.toml", host="0.0.0.0")
 
-    assert proc.calls == [
-        ("flowchem", ["config.toml", "--host", "0.0.0.0"])
-    ]
+    assert proc.calls == [("flowchem", ["config.toml", "--host", "0.0.0.0"])]
 
 
 def test_start_keeps_debug_and_simulation_options():

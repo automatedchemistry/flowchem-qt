@@ -22,7 +22,7 @@ _LOCAL_ONLY_INDEX = 0
 _LOCAL_NETWORK_INDEX = 1
 _ACCESS_OPTIONS = [
     ("This computer only", "127.0.0.1"),
-    ("Local network", "0.0.0.0"),
+    ("Local network", "0.0.0.0"),  # nosec B104 - explicit user opt-in for LAN access
 ]
 _ACCESS_DESCRIPTIONS = {
     _LOCAL_ONLY_INDEX: "Recommended. FlowChem can be opened only from this computer.",
