@@ -46,6 +46,7 @@ The main window has four tabs and a persistent status bar at the bottom showing 
 
 - **Red dot** — server is stopped
 - **Green dot** — server is running
+- **Dark mode / Light mode** — switches the theme and remembers the selection
 
 ### Config editor
 

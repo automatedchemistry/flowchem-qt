@@ -2,12 +2,14 @@ import ctypes
 import sys
 from pathlib import Path
 
-from qfluentwidgets import Theme, setTheme, setThemeColor
+from qfluentwidgets import setThemeColor
+from PyQt5.QtCore import QSettings
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication
 
 from app.cli import parse_args
 from app.main_window import MainWindow
+from app.theme import apply_theme, load_theme
 from app.tray import TrayIcon
 
 _APP_ID = "org.flowchem.gui"
@@ -30,7 +32,8 @@ def main():
     sys.stderr = open(log_path, "a", encoding="utf-8")
 
     app = QApplication(qt_argv)
-    setTheme(Theme.AUTO)
+    settings = QSettings("flowchem", "gui")
+    apply_theme(app, load_theme(settings))
     setThemeColor("#0065d5")
     app.setQuitOnLastWindowClosed(args.no_tray)
 
@@ -41,7 +44,11 @@ def main():
     app._flowchem_tray_icon = tray_icon
     app.setWindowIcon(window_icon)
 
-    window = MainWindow(minimize_to_tray=not args.no_tray, window_icon=window_icon)
+    window = MainWindow(
+        minimize_to_tray=not args.no_tray,
+        window_icon=window_icon,
+        settings=settings,
+    )
     if not args.no_tray:
         TrayIcon(window, window.server_manager, tray_icon, app)
     window.show()

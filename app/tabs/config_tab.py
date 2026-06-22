@@ -18,7 +18,9 @@ _TOML_FILTER = "TOML files (*.toml);;All files (*)"
 class ConfigTab(QWidget):
     def __init__(self, parent=None, settings: QSettings | None = None):
         super().__init__(parent)
-        self._settings = settings or QSettings("flowchem", "gui")
+        self._settings = (
+            settings if settings is not None else QSettings("flowchem", "gui")
+        )
 
         self.path_edit = LineEdit()
         self.path_edit.setPlaceholderText("Path to config.toml")

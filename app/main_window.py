@@ -1,11 +1,21 @@
+from PyQt5.QtCore import QSettings
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QLabel, QMainWindow, QMessageBox, QStatusBar, QTabWidget
+from PyQt5.QtWidgets import (
+    QApplication,
+    QLabel,
+    QMainWindow,
+    QMessageBox,
+    QStatusBar,
+    QTabWidget,
+)
+from qfluentwidgets import PushButton
 
 from app.server_manager import ServerManager
 from app.tabs.config_tab import ConfigTab
 from app.tabs.discover_tab import DiscoverTab
 from app.tabs.logs_tab import LogsTab
 from app.tabs.server_tab import ServerTab
+from app.theme import DARK_THEME, LIGHT_THEME, THEME_KEY, apply_theme, load_theme
 
 
 class MainWindow(QMainWindow):
@@ -14,9 +24,14 @@ class MainWindow(QMainWindow):
         parent=None,
         minimize_to_tray: bool = True,
         window_icon: QIcon | None = None,
+        settings: QSettings | None = None,
     ):
         super().__init__(parent)
         self._minimize_to_tray = minimize_to_tray
+        self._settings = (
+            settings if settings is not None else QSettings("flowchem", "gui")
+        )
+        self._theme = load_theme(self._settings)
         self.setWindowTitle("FlowChem Manager")
         if window_icon is not None:
             self.setWindowIcon(window_icon)
@@ -24,7 +39,7 @@ class MainWindow(QMainWindow):
 
         self.server_manager = ServerManager(self)
 
-        self.config_tab = ConfigTab()
+        self.config_tab = ConfigTab(settings=self._settings)
         self.server_tab = ServerTab(self.server_manager, self.config_tab)
         self.discover_tab = DiscoverTab(self.config_tab)
         self.logs_tab = LogsTab()
@@ -46,6 +61,10 @@ class MainWindow(QMainWindow):
         status_bar = QStatusBar()
         status_bar.setToolTip("Shows the latest FlowChem Manager status message.")
         status_bar.addWidget(self._status_dot)
+        self.theme_btn = PushButton()
+        self.theme_btn.clicked.connect(self._toggle_theme)
+        self._update_theme_button()
+        status_bar.addPermanentWidget(self.theme_btn)
         self.setStatusBar(status_bar)
 
         self.server_manager.started.connect(self._on_started)
@@ -53,6 +72,20 @@ class MainWindow(QMainWindow):
         self.server_manager.error.connect(self._on_error)
         self.server_manager.stdout_ready.connect(self.logs_tab.append_process_output)
         self.server_manager.stderr_ready.connect(self.logs_tab.append_process_output)
+
+    def _toggle_theme(self):
+        next_theme = LIGHT_THEME if self._theme == DARK_THEME else DARK_THEME
+        qt_app = QApplication.instance()
+        if qt_app is None:
+            return
+        self._theme = apply_theme(qt_app, next_theme)
+        self._settings.setValue(THEME_KEY, self._theme)
+        self._update_theme_button()
+
+    def _update_theme_button(self):
+        target = "Light" if self._theme == DARK_THEME else "Dark"
+        self.theme_btn.setText(f"{target} mode")
+        self.theme_btn.setToolTip(f"Switch to {target.lower()} mode.")
 
     def closeEvent(self, event):
         if self._minimize_to_tray:
