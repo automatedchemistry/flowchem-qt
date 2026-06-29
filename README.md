@@ -77,12 +77,13 @@ Start and stop the FlowChem server and open the interactive API browser.
 | Element | Description |
 |---|---|
 | Server address | Base URL of the running server (default `http://localhost:8000`). |
+| Server access | Controls who can connect to the server. `This computer only` binds to `127.0.0.1`; `Local network` binds to `0.0.0.0` so other computers on the same trusted network can connect. |
 | Debug mode | Passes `--debug` to FlowChem for verbose log output. |
 | Simulation mode | Launches `flowchem-sim` instead of `flowchem`. All device drivers are replaced with simulated counterparts — no physical hardware required. |
 | Start / Stop | Single toggle button. Starts or stops the server process. |
 | Open API browser | Opens `<server address>/docs` in the system browser. |
 
-> The address field, debug checkbox, and simulation mode checkbox are disabled while the server is running.
+> The address field, server access selector, debug checkbox, and simulation mode checkbox are disabled while the server is running.
 
 ---
 

@@ -64,9 +64,7 @@ def test_theme_button_switches_label_palette_and_persists_selection():
     assert settings.values["theme"] == DARK_THEME
     assert window.theme_btn.text() == "Light mode"
     assert qconfig.theme == Theme.DARK
-    assert (
-        window.config_tab.editor.palette().color(QPalette.Text).name() == "#ffffff"
-    )
+    assert window.config_tab.editor.palette().color(QPalette.Text).name() == "#ffffff"
     window._on_started()
     assert window.theme_btn.isEnabled()
 
