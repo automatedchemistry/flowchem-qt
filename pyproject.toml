@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "flowchem-qt"
-version = "0.0.4"
+version = "0.0."
 requires-python = ">=3.11"
 dependencies = [
     "flowchem",
@@ -23,4 +23,7 @@ flowchem-qt = "main:main"
 
 [tool.setuptools]
 py-modules = ["main"]
-packages = ["app", "app.tabs"]
+packages = ["app", "app.tabs", "resources", "resources.icons"]
+
+[tool.setuptools.package-data]
+"resources.icons" = ["*.ico", "*.svg"]
