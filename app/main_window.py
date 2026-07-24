@@ -1,7 +1,11 @@
-from PyQt5.QtCore import QSettings
+import sys
+from pathlib import Path
+
+from PyQt5.QtCore import QSettings, QStandardPaths
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import (
     QApplication,
+    QFileDialog,
     QLabel,
     QMainWindow,
     QMessageBox,
@@ -16,6 +20,18 @@ from app.tabs.discover_tab import DiscoverTab
 from app.tabs.logs_tab import LogsTab
 from app.tabs.server_tab import ServerTab
 from app.theme import DARK_THEME, LIGHT_THEME, THEME_KEY, apply_theme, load_theme
+from app.windows_launcher import (
+    ICON_PATH,
+    PROJECT_ROOT,
+    SHORTCUT_NAME,
+    LauncherBuildError,
+    ShortcutBuildError,
+    build_launcher,
+    create_windows_shortcut,
+)
+
+
+IS_WINDOWS = sys.platform == "win32"
 
 
 class MainWindow(QMainWindow):
@@ -61,6 +77,11 @@ class MainWindow(QMainWindow):
         status_bar = QStatusBar()
         status_bar.setToolTip("Shows the latest FlowChem Manager status message.")
         status_bar.addWidget(self._status_dot)
+        self.shortcut_btn = PushButton("Create shortcut")
+        self.shortcut_btn.setToolTip("Create a Windows shortcut for FlowChem Manager.")
+        self.shortcut_btn.clicked.connect(self._create_shortcut)
+        status_bar.addPermanentWidget(self.shortcut_btn)
+        self.shortcut_btn.setVisible(IS_WINDOWS)
         self.theme_btn = PushButton()
         self.theme_btn.clicked.connect(self._toggle_theme)
         self._update_theme_button()
@@ -72,6 +93,65 @@ class MainWindow(QMainWindow):
         self.server_manager.error.connect(self._on_error)
         self.server_manager.stdout_ready.connect(self.logs_tab.append_process_output)
         self.server_manager.stderr_ready.connect(self.logs_tab.append_process_output)
+
+    def _create_shortcut(self):
+        desktop = QStandardPaths.writableLocation(QStandardPaths.DesktopLocation)
+        if not desktop or not Path(desktop).is_dir():
+            desktop = str(Path.home())
+        destination = QFileDialog.getExistingDirectory(
+            self,
+            "Choose shortcut location",
+            desktop,
+            QFileDialog.ShowDirsOnly,
+        )
+        if not destination:
+            return
+
+        shortcut_path = Path(destination) / SHORTCUT_NAME
+        if shortcut_path.exists():
+            answer = QMessageBox.question(
+                self,
+                "Replace shortcut?",
+                f"{shortcut_path.name} already exists. Replace it?",
+                QMessageBox.Yes | QMessageBox.No,
+                QMessageBox.No,
+            )
+            if answer != QMessageBox.Yes:
+                return
+
+        self.shortcut_btn.setEnabled(False)
+        try:
+            launcher_path = build_launcher(PROJECT_ROOT, Path(sys.prefix))
+            create_windows_shortcut(
+                shortcut_path,
+                launcher_path,
+                ICON_PATH,
+                working_directory=PROJECT_ROOT,
+            )
+        except LauncherBuildError as error:
+            missing = "\n".join(f"  - {path}" for path in error.missing_paths)
+            self._show_shortcut_error(
+                f"Could not build the launcher. Required files are missing:\n{missing}"
+            )
+        except (ShortcutBuildError, OSError) as error:
+            self._show_shortcut_error(str(error))
+        else:
+            self.statusBar().showMessage(f"Shortcut created: {shortcut_path}", 5000)
+            QMessageBox.information(
+                self,
+                "Shortcut created",
+                f"Created:\n{shortcut_path}",
+            )
+        finally:
+            self.shortcut_btn.setEnabled(True)
+
+    def _show_shortcut_error(self, message: str):
+        self.statusBar().showMessage("Shortcut creation failed", 5000)
+        QMessageBox.critical(
+            self,
+            "Shortcut creation failed",
+            message,
+        )
 
     def _toggle_theme(self):
         next_theme = LIGHT_THEME if self._theme == DARK_THEME else DARK_THEME
@@ -86,6 +166,14 @@ class MainWindow(QMainWindow):
         target = "Light" if self._theme == DARK_THEME else "Dark"
         self.theme_btn.setText(f"{target} mode")
         self.theme_btn.setToolTip(f"Switch to {target.lower()} mode.")
+
+    def show_and_activate(self):
+        if self.isMinimized():
+            self.showNormal()
+        else:
+            self.show()
+        self.raise_()
+        self.activateWindow()
 
     def closeEvent(self, event):
         if self._minimize_to_tray:

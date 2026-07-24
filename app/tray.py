@@ -11,7 +11,7 @@ class TrayIcon(QSystemTrayIcon):
         self.setToolTip("Flowchem Manager")
 
         menu = QMenu()
-        act_show = menu.addAction("Show window", window.show)
+        act_show = menu.addAction("Show window", window.show_and_activate)
         act_show.setToolTip("Show the FlowChem Manager window.")
         menu.addSeparator()
         self._act_start = menu.addAction("Start server", self._start)
@@ -35,11 +35,10 @@ class TrayIcon(QSystemTrayIcon):
 
     def _on_activated(self, reason):
         if reason == QSystemTrayIcon.DoubleClick:
-            self._window.show()
-            self._window.raise_()
+            self._window.show_and_activate()
 
     def _start(self):
-        self._window.show()
+        self._window.show_and_activate()
         self._window.server_tab._toggle()
 
     def _on_started(self):

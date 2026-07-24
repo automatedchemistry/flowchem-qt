@@ -221,3 +221,6 @@ __marimo__/
 .flowchem-sim/
 .pre-commit-cache*
 pytest-cache*
+
+# Locally generated Windows launcher
+flowchem-qt.bat

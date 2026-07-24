@@ -38,6 +38,35 @@ flowchem-qt --no-tray    # launches silently without tray; closing the window ex
 python main.py           # development / debug
 ```
 
+### Windows virtualenv launcher
+
+To create a double-clickable launcher that uses the project's `.venv`, run:
+
+```powershell
+python scripts/build_bat.py
+```
+
+This writes `flowchem-qt.bat` in the project root. Double-click it to start the
+application without leaving a command window open. A `cmd.exe` window may flash
+briefly while the launcher starts `pythonw.exe`.
+
+The launcher prepends `.venv\Scripts` to `PATH`, allowing the GUI to find
+`flowchem`, `flowchem-sim`, and `flowchem-autodiscover`. To use a different
+virtual environment, regenerate it with:
+
+```powershell
+python scripts/build_bat.py --venv-dir path\to\venv
+```
+
+Relative virtual-environment paths are resolved from the project root. Regenerate
+the launcher whenever the virtual environment is moved or replaced.
+
+On Windows, the **Create shortcut** button beside the theme button provides the
+same setup from the GUI. Choose a destination folder and the application rebuilds
+`flowchem-qt.bat` using the Python environment currently running the GUI, then
+creates `FlowChem Qt.lnk` with the FlowChem icon. Recreate the shortcut if the
+project or an external Python environment is moved.
+
 ---
 
 ## Window Overview
@@ -121,6 +150,10 @@ Live log viewer — always accessible, even while the server is running.
 ## System tray
 
 By default, closing the main window minimises to the system tray — the application keeps running in the background. Launch with `flowchem-qt --no-tray` to disable the tray and make closing the window exit the application.
+
+FlowChem Manager allows one running instance per operating-system user.
+Launching it again from the shortcut, BAT, or command line restores and focuses
+the existing window; options passed to the second launch are ignored.
 
 Right-click the tray icon to access:
 
