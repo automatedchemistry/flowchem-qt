@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import os
-import subprocess
+import subprocess  # nosec B404 - used only to run a fixed, hardcoded PowerShell command below
 from pathlib import Path
 
 
@@ -190,7 +190,7 @@ def create_windows_shortcut(
     ]
 
     try:
-        result = subprocess.run(
+        result = subprocess.run(  # nosec B603 - command list is static; dynamic values are passed via env, not argv
             command,
             capture_output=True,
             text=True,
