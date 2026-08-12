@@ -4,7 +4,6 @@ import sys
 import threading
 import time
 import uuid
-from pathlib import Path
 
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
@@ -22,9 +21,7 @@ _APP = None
 
 def get_app():
     global _APP
-    _APP = QApplication.instance() or QApplication(
-        ["test", "-platform", "offscreen"]
-    )
+    _APP = QApplication.instance() or QApplication(["test", "-platform", "offscreen"])
     _APP.setQuitOnLastWindowClosed(False)
     return _APP
 

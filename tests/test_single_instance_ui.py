@@ -27,9 +27,7 @@ class FakeSettings:
 
 def get_app():
     global _APP
-    _APP = QApplication.instance() or QApplication(
-        ["test", "-platform", "offscreen"]
-    )
+    _APP = QApplication.instance() or QApplication(["test", "-platform", "offscreen"])
     _APP.setQuitOnLastWindowClosed(False)
     return _APP
 
@@ -42,9 +40,7 @@ def test_show_and_activate_restores_hidden_window(monkeypatch):
     monkeypatch.setattr(window, "show", lambda: calls.append("show"))
     monkeypatch.setattr(window, "showNormal", lambda: calls.append("showNormal"))
     monkeypatch.setattr(window, "raise_", lambda: calls.append("raise"))
-    monkeypatch.setattr(
-        window, "activateWindow", lambda: calls.append("activate")
-    )
+    monkeypatch.setattr(window, "activateWindow", lambda: calls.append("activate"))
 
     window.show_and_activate()
 
@@ -60,9 +56,7 @@ def test_show_and_activate_restores_minimized_window(monkeypatch):
     monkeypatch.setattr(window, "show", lambda: calls.append("show"))
     monkeypatch.setattr(window, "showNormal", lambda: calls.append("showNormal"))
     monkeypatch.setattr(window, "raise_", lambda: calls.append("raise"))
-    monkeypatch.setattr(
-        window, "activateWindow", lambda: calls.append("activate")
-    )
+    monkeypatch.setattr(window, "activateWindow", lambda: calls.append("activate"))
 
     window.show_and_activate()
 
@@ -75,9 +69,7 @@ def test_tray_actions_use_centralized_activation(monkeypatch):
     window = MainWindow(minimize_to_tray=False, settings=FakeSettings())
     activations = []
     starts = []
-    monkeypatch.setattr(
-        window, "show_and_activate", lambda: activations.append(True)
-    )
+    monkeypatch.setattr(window, "show_and_activate", lambda: activations.append(True))
     monkeypatch.setattr(window.server_tab, "_toggle", lambda: starts.append(True))
     tray = TrayIcon(window, window.server_manager, QIcon(), app)
 
@@ -91,9 +83,7 @@ def test_tray_actions_use_centralized_activation(monkeypatch):
     window.close()
 
 
-def test_secondary_startup_exits_before_window_or_tray_creation(
-    tmp_path, monkeypatch
-):
+def test_secondary_startup_exits_before_window_or_tray_creation(tmp_path, monkeypatch):
     class FakeApp:
         pass
 
@@ -126,9 +116,7 @@ def test_secondary_startup_exits_before_window_or_tray_creation(
         lambda argv: (SimpleNamespace(no_tray=False), argv),
     )
     monkeypatch.setattr(main_module, "QApplication", lambda _argv: fake_app)
-    monkeypatch.setattr(
-        main_module, "SingleInstanceCoordinator", FakeCoordinator
-    )
+    monkeypatch.setattr(main_module, "SingleInstanceCoordinator", FakeCoordinator)
     monkeypatch.setattr(builtins, "__import__", guarded_import)
     monkeypatch.setattr(Path, "home", classmethod(lambda _cls: tmp_path))
 

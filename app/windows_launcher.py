@@ -162,11 +162,7 @@ def create_windows_shortcut(
     icon_path = icon_path.resolve()
     working_directory = working_directory.resolve()
 
-    missing_paths = [
-        path
-        for path in (launcher_path, icon_path)
-        if not path.is_file()
-    ]
+    missing_paths = [path for path in (launcher_path, icon_path) if not path.is_file()]
     if not shortcut_path.parent.is_dir():
         missing_paths.append(shortcut_path.parent)
     if not working_directory.is_dir():
@@ -203,9 +199,7 @@ def create_windows_shortcut(
             creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0),
         )
     except OSError as error:
-        raise ShortcutBuildError(
-            f"Could not start PowerShell: {error}"
-        ) from error
+        raise ShortcutBuildError(f"Could not start PowerShell: {error}") from error
 
     if result.returncode != 0:
         detail = result.stderr.strip() or result.stdout.strip()

@@ -26,9 +26,7 @@ class FakeSettings:
 
 def get_app():
     global _APP
-    _APP = QApplication.instance() or QApplication(
-        ["test", "-platform", "offscreen"]
-    )
+    _APP = QApplication.instance() or QApplication(["test", "-platform", "offscreen"])
     _APP.setQuitOnLastWindowClosed(False)
     return _APP
 
@@ -63,9 +61,7 @@ def test_shortcut_button_is_hidden_outside_windows(monkeypatch):
 
 def test_shortcut_dialog_cancellation_does_nothing(monkeypatch):
     window = create_window(monkeypatch)
-    monkeypatch.setattr(
-        QFileDialog, "getExistingDirectory", lambda *_args: ""
-    )
+    monkeypatch.setattr(QFileDialog, "getExistingDirectory", lambda *_args: "")
 
     def unexpected_build(*_args):
         raise AssertionError("BAT builder should not run after cancellation")
@@ -78,9 +74,7 @@ def test_shortcut_dialog_cancellation_does_nothing(monkeypatch):
     window.close()
 
 
-def test_existing_shortcut_is_not_replaced_without_confirmation(
-    tmp_path, monkeypatch
-):
+def test_existing_shortcut_is_not_replaced_without_confirmation(tmp_path, monkeypatch):
     window = create_window(monkeypatch)
     shortcut_path = tmp_path / SHORTCUT_NAME
     shortcut_path.write_bytes(b"existing")
@@ -147,9 +141,7 @@ def test_shortcut_button_builds_with_running_environment_and_icon(
         return shortcut
 
     monkeypatch.setattr(main_window, "build_launcher", fake_build)
-    monkeypatch.setattr(
-        main_window, "create_windows_shortcut", fake_create
-    )
+    monkeypatch.setattr(main_window, "create_windows_shortcut", fake_create)
 
     window.shortcut_btn.click()
 
@@ -167,9 +159,7 @@ def test_shortcut_button_builds_with_running_environment_and_icon(
     window.close()
 
 
-def test_shortcut_build_error_is_shown_and_button_is_reenabled(
-    tmp_path, monkeypatch
-):
+def test_shortcut_build_error_is_shown_and_button_is_reenabled(tmp_path, monkeypatch):
     window = create_window(monkeypatch)
     missing_path = tmp_path / "missing" / "flowchem.exe"
     errors = []

@@ -34,10 +34,7 @@ def test_build_launcher_uses_project_relative_default_venv(tmp_path):
     assert 'set "PATH=%SCRIPTS_DIR%;%PATH%"' in launcher
     assert 'cd /d "%PROJECT_DIR%"' in launcher
     assert 'set "PYTHONW=%SCRIPTS_DIR%\\pythonw.exe"' in launcher
-    assert (
-        'start "" "%PYTHONW%" "%PROJECT_DIR%main.py" %*'
-        in launcher
-    )
+    assert 'start "" "%PYTHONW%" "%PROJECT_DIR%main.py" %*' in launcher
     assert b"\r\n" in raw_launcher
     assert b"\n" not in raw_launcher.replace(b"\r\n", b"")
 
@@ -47,9 +44,7 @@ def test_build_launcher_uses_relative_custom_venv_inside_project(tmp_path):
     venv_dir = project_root / "environments" / "flowchem env"
     create_project(project_root, venv_dir)
 
-    launcher_path = build_launcher(
-        project_root, Path("environments") / "flowchem env"
-    )
+    launcher_path = build_launcher(project_root, Path("environments") / "flowchem env")
 
     launcher = launcher_path.read_text(encoding="utf-8")
     assert 'set "VENV_DIR=%~dp0environments\\flowchem env"' in launcher
