@@ -143,7 +143,9 @@ Live log viewer — always accessible, even while the server is running.
 | Element | Description |
 |---|---|
 | Log area | Streams output from the FlowChem server process and internal GUI events. Auto-scrolls to the latest entry. |
-| Clear | Clears the log area. |
+| Auto-save… | Opens a dialog to choose where and under which name to save the log. Everything already in the log area is written immediately, and every new message is appended to the file as it arrives. Click **Stop auto-save** to stop. Auto-save is not remembered after the application is closed. |
+| Saving to | Shows the file currently receiving the log output. |
+| Clear | Clears the log area. The auto-save file is not affected. |
 
 ---
 

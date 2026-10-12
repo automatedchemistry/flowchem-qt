@@ -58,7 +58,7 @@ class MainWindow(QMainWindow):
         self.config_tab = ConfigTab(settings=self._settings)
         self.server_tab = ServerTab(self.server_manager, self.config_tab)
         self.discover_tab = DiscoverTab(self.config_tab)
-        self.logs_tab = LogsTab()
+        self.logs_tab = LogsTab(settings=self._settings)
 
         tabs = QTabWidget()
         tabs.addTab(self.config_tab, "Config editor")
@@ -93,6 +93,10 @@ class MainWindow(QMainWindow):
         self.server_manager.error.connect(self._on_error)
         self.server_manager.stdout_ready.connect(self.logs_tab.append_process_output)
         self.server_manager.stderr_ready.connect(self.logs_tab.append_process_output)
+
+        qt_app = QApplication.instance()
+        if qt_app is not None:
+            qt_app.aboutToQuit.connect(self.logs_tab.close_autosave)
 
     def _create_shortcut(self):
         desktop = QStandardPaths.writableLocation(QStandardPaths.DesktopLocation)
