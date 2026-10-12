@@ -1,6 +1,7 @@
 from contextlib import suppress
 from datetime import datetime
 from pathlib import Path
+from typing import TextIO
 
 from PyQt5.QtCore import QSettings, QStandardPaths, QTimer
 from PyQt5.QtWidgets import (
@@ -24,7 +25,7 @@ class LogsTab(QWidget):
         self._settings = (
             settings if settings is not None else QSettings("flowchem", "gui")
         )
-        self._log_file = None
+        self._log_file: TextIO | None = None
         self.log_view = QPlainTextEdit(readOnly=True)
 
         self.autosave_label = QLabel()
@@ -71,14 +72,14 @@ class LogsTab(QWidget):
         sb = self.log_view.verticalScrollBar()
         sb.setValue(sb.maximum())
         if self._log_file is not None:
-            self._write_to_file(text)
+            self._write_to_file(self._log_file, text)
 
-    def _write_to_file(self, text: str):
+    def _write_to_file(self, log_file: TextIO, text: str):
         try:
-            self._log_file.write(text + "\n")
-            self._log_file.flush()
+            log_file.write(text + "\n")
+            log_file.flush()
         except (OSError, ValueError) as exc:
-            message = f"Could not write to log file:\n{self._log_file.name}\n\n{exc}"
+            message = f"Could not write to log file:\n{log_file.name}\n\n{exc}"
             self._close_log_file()
             # This can run inside the loguru sink, where logging again is not
             # allowed — report the failure from the event loop instead.
