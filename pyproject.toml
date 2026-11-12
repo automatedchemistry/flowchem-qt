@@ -5,15 +5,17 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "flowchem-qt"
 version = "0.0.7"
-requires-python = ">=3.11"
+requires-python = ">=3.11, <3.14"
 dependencies = [
-    "flowchem",
-    "PyQt5>=5.15.11",
+    "flowchem>=1.1",
+    "PyQt5 ~= 5.15.11",
+    "pyqt5-qt5==5.15.2; sys_platform == 'win32'",
     "PyQt-Fluent-Widgets>=1.11.2",
     "tomli-w>=1.0",
     "loguru>=0.7",
     "zeroconf>=0.149.7",
-    "click>=8.3.3",
+    "click",
+    "nuitka>=4.3.5",
 ]
 
 [project.optional-dependencies]
