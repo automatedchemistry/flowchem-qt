@@ -224,3 +224,7 @@ pytest-cache*
 
 # Locally generated Windows launcher
 flowchem-qt.bat
+
+# Nuitka build scratch folders
+*.build/
+*.onefile-build/
