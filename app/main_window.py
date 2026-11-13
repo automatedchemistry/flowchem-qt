@@ -1,9 +1,9 @@
 import sys
 from pathlib import Path
 
-from PyQt5.QtCore import QSettings, QStandardPaths
-from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import (
+from PySide6.QtCore import QSettings, QStandardPaths
+from PySide6.QtGui import QIcon
+from PySide6.QtWidgets import (
     QApplication,
     QFileDialog,
     QLabel,
@@ -29,7 +29,6 @@ from app.windows_launcher import (
     build_launcher,
     create_windows_shortcut,
 )
-
 
 IS_WINDOWS = sys.platform == "win32"
 
@@ -106,7 +105,7 @@ class MainWindow(QMainWindow):
             self,
             "Choose shortcut location",
             desktop,
-            QFileDialog.ShowDirsOnly,
+            QFileDialog.Option.ShowDirsOnly,
         )
         if not destination:
             return
@@ -117,10 +116,10 @@ class MainWindow(QMainWindow):
                 self,
                 "Replace shortcut?",
                 f"{shortcut_path.name} already exists. Replace it?",
-                QMessageBox.Yes | QMessageBox.No,
-                QMessageBox.No,
+                QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+                QMessageBox.StandardButton.No,
             )
-            if answer != QMessageBox.Yes:
+            if answer != QMessageBox.StandardButton.Yes:
                 return
 
         self.shortcut_btn.setEnabled(False)

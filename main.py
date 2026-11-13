@@ -2,7 +2,7 @@ import ctypes
 import sys
 from pathlib import Path
 
-from PyQt5.QtWidgets import QApplication, QMessageBox
+from PySide6.QtWidgets import QApplication, QMessageBox
 
 from app.cli import parse_args
 from app.single_instance import (
@@ -59,12 +59,12 @@ def main(argv: list[str] | None = None) -> int:
         )
         return 1
 
-    app._flowchem_single_instance = coordinator
+    app._flowchem_single_instance = coordinator  # type: ignore[attr-defined]
     app.aboutToQuit.connect(coordinator.close)
 
+    from PySide6.QtCore import QSettings
+    from PySide6.QtGui import QIcon
     from qfluentwidgets import setThemeColor
-    from PyQt5.QtCore import QSettings
-    from PyQt5.QtGui import QIcon
 
     from app.main_window import MainWindow
     from app.theme import apply_theme, load_theme
@@ -78,8 +78,8 @@ def main(argv: list[str] | None = None) -> int:
     icon_dir = Path(__file__).parent / "resources" / "icons"
     window_icon = QIcon(str(icon_dir / "flowchem_app_icon.ico"))
     tray_icon = QIcon(str(icon_dir / "flowchem_logo.svg"))
-    app._flowchem_window_icon = window_icon
-    app._flowchem_tray_icon = tray_icon
+    app._flowchem_window_icon = window_icon  # type: ignore[attr-defined]
+    app._flowchem_tray_icon = tray_icon  # type: ignore[attr-defined]
     app.setWindowIcon(window_icon)
 
     window = MainWindow(

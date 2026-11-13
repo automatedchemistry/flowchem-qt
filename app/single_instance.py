@@ -5,9 +5,8 @@ import os
 from enum import Enum, auto
 from pathlib import Path
 
-from PyQt5.QtCore import QLockFile, QObject, pyqtSignal
-from PyQt5.QtNetwork import QLocalServer, QLocalSocket
-
+from PySide6.QtCore import QLockFile, QObject, Signal
+from PySide6.QtNetwork import QLocalServer, QLocalSocket
 
 _ACTIVATE_MESSAGE = b"activate\n"
 
@@ -31,7 +30,7 @@ def server_name_for_user(app_id: str, user_home: Path) -> str:
 
 
 class SingleInstanceCoordinator(QObject):
-    activation_requested = pyqtSignal()
+    activation_requested = Signal()
 
     def __init__(
         self,
@@ -52,7 +51,7 @@ class SingleInstanceCoordinator(QObject):
         self._lock = QLockFile(str(self._lock_path))
         self._lock.setStaleLockTime(0)
         self._server = QLocalServer(self)
-        self._server.setSocketOptions(QLocalServer.UserAccessOption)
+        self._server.setSocketOptions(QLocalServer.SocketOption.UserAccessOption)
         self._server.newConnection.connect(self._accept_connections)
 
     def start(self) -> InstanceStatus:
@@ -74,7 +73,10 @@ class SingleInstanceCoordinator(QObject):
             self._is_primary = True
             return InstanceStatus.PRIMARY
 
-        if self._lock.error() in (QLockFile.PermissionError, QLockFile.UnknownError):
+        if self._lock.error() in (
+            QLockFile.LockError.PermissionError,
+            QLockFile.LockError.UnknownError,
+        ):
             raise SingleInstanceError(
                 f"Could not acquire the instance lock: {self._lock_path}"
             )
@@ -99,12 +101,16 @@ class SingleInstanceCoordinator(QObject):
                 continue
             accepted = socket.write(_ACTIVATE_MESSAGE)
             socket.flush()
-            delivered = accepted == len(_ACTIVATE_MESSAGE) and (
-                socket.bytesToWrite() == 0
-                or socket.waitForBytesWritten(self._connect_timeout_ms)
-            )
+            delivered = accepted == len(_ACTIVATE_MESSAGE)
+            if delivered:
+                socket.waitForBytesWritten(self._connect_timeout_ms)
+                # Wait for primary to read the data before disconnecting
+                socket.readyRead.connect(lambda: None)  # Keep connection open
+                if not socket.waitForReadyRead(100):
+                    pass  # Primary might have already read
             socket.disconnectFromServer()
-            return delivered
+            if delivered:
+                return True
         return False
 
     def _accept_connections(self) -> None:
@@ -116,11 +122,17 @@ class SingleInstanceCoordinator(QObject):
                 lambda connected_socket=socket: self._read_request(connected_socket)
             )
             socket.disconnected.connect(socket.deleteLater)
-            if socket.bytesAvailable():
+            # Data might already be available
+            if socket.bytesAvailable() > 0:
                 self._read_request(socket)
 
     def _read_request(self, socket: QLocalSocket) -> None:
-        message = bytes(socket.readAll())
-        if _ACTIVATE_MESSAGE in message:
+        if socket is None or not socket.isOpen():
+            return
+        if socket.bytesAvailable() == 0 and not socket.waitForReadyRead(
+            self._connect_timeout_ms
+        ):
+            return
+        data = bytes(socket.readAll().data())
+        if data == _ACTIVATE_MESSAGE:
             self.activation_requested.emit()
-        socket.disconnectFromServer()
