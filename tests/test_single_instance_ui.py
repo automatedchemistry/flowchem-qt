@@ -6,8 +6,8 @@ from types import SimpleNamespace
 
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
-from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QApplication, QSystemTrayIcon
+from PySide6.QtGui import QIcon
+from PySide6.QtWidgets import QApplication, QSystemTrayIcon
 
 import main as main_module
 from app.main_window import MainWindow
@@ -74,7 +74,7 @@ def test_tray_actions_use_centralized_activation(monkeypatch):
     tray = TrayIcon(window, window.server_manager, QIcon(), app)
 
     tray.contextMenu().actions()[0].trigger()
-    tray._on_activated(QSystemTrayIcon.DoubleClick)
+    tray._on_activated(QSystemTrayIcon.ActivationReason.DoubleClick)
     tray._start()
 
     assert len(activations) == 3

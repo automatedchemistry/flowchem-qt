@@ -1,5 +1,6 @@
-from PyQt5.QtCore import QProcess
-from PyQt5.QtWidgets import (
+from loguru import logger
+from PySide6.QtCore import QProcess
+from PySide6.QtWidgets import (
     QHBoxLayout,
     QMessageBox,
     QPlainTextEdit,
@@ -7,7 +8,6 @@ from PyQt5.QtWidgets import (
     QWidget,
 )
 from qfluentwidgets import PrimaryPushButton, PushButton
-from loguru import logger
 
 _WARNING = (
     "Autodiscover communicates over serial ports.\n"
@@ -55,9 +55,9 @@ class DiscoverTab(QWidget):
             self,
             "Warning",
             _WARNING,
-            QMessageBox.Ok | QMessageBox.Cancel,
+            QMessageBox.StandardButton.Ok | QMessageBox.StandardButton.Cancel,
         )
-        if reply != QMessageBox.Ok:
+        if reply != QMessageBox.StandardButton.Ok:
             return
         self.output.clear()
         self.copy_btn.setEnabled(False)

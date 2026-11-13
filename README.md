@@ -11,7 +11,7 @@
 ## Requirements
 
 - Python ≥ 3.11
-- GUI runtime: PyQt5 and PyQt-Fluent-Widgets
+- GUI runtime: PySide6 and PySide6-Fluent-Widgets
 - FlowChem installed and available on `PATH` (activate your FlowChem virtualenv before launching)
 
 ## Installation
@@ -26,9 +26,9 @@ Or, to install from source:
 pip install -e .
 ```
 
-For development, use a fresh virtual environment when switching Qt bindings. The QFluentWidgets PyQt5, PyQt6, PySide2, and PySide6 packages all provide the same `qfluentwidgets` import package, so they should not be installed together.
+For development, use a fresh virtual environment when switching Qt bindings. The QFluentWidgets PyQt5, PyQt6, PySide2, and PySide6 packages all provide the same `qfluentwidgets` import package, so they should not be installed together. This project uses the PySide6 binding.
 
-PyQt5 and PyQt-Fluent-Widgets are GPL/commercial-license runtime dependencies. The FlowChem Qt application license is unchanged, but downstream distribution should account for those dependency licenses.
+PySide6 is LGPL-licensed, and PySide6-Fluent-Widgets is GPL/commercial-licensed. The FlowChem Qt application license is unchanged, but downstream distribution should account for those dependency licenses.
 
 ## Usage
 
@@ -85,12 +85,12 @@ Edit the FlowChem `config.toml` directly in the app. Browse for a file, load it 
   <img src="resources/editor.png" alt="Config editor tab" width="480"/>
 </p>
 
-| Element | Description |
-|---|---|
-| Path field | Full path to the config file. Remembered between sessions. |
-| Browse | Opens a file dialog to pick a `.toml` file. |
-| Load | Reads the selected file into the editor. |
-| Save | Writes the editor content back to disk. |
+| Element     | Description                                                                           |
+| ----------- | ------------------------------------------------------------------------------------- |
+| Path field  | Full path to the config file. Remembered between sessions.                            |
+| Browse      | Opens a file dialog to pick a `.toml` file.                                           |
+| Load        | Reads the selected file into the editor.                                              |
+| Save        | Writes the editor content back to disk.                                               |
 | Editor area | Plain-text editor for the raw TOML content. The FlowChem server validates on startup. |
 
 ---
@@ -103,14 +103,14 @@ Start and stop the FlowChem server and open the interactive API browser.
   <img src="resources/server.png" alt="Server tab" width="480"/>
 </p>
 
-| Element | Description |
-|---|---|
-| Server address | Base URL of the running server (default `http://localhost:8000`). |
-| Server access | Controls who can connect to the server. `This computer only` binds to `127.0.0.1`; `Local network` binds to `0.0.0.0` so other computers on the same trusted network can connect. |
-| Debug mode | Passes `--debug` to FlowChem for verbose log output. |
-| Simulation mode | Launches `flowchem-sim` instead of `flowchem`. All device drivers are replaced with simulated counterparts — no physical hardware required. |
-| Start / Stop | Single toggle button. Starts or stops the server process. |
-| Open API browser | Opens `<server address>/docs` in the system browser. |
+| Element          | Description                                                                                                                                                                       |
+| ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Server address   | Base URL of the running server (default `http://localhost:8000`).                                                                                                                 |
+| Server access    | Controls who can connect to the server. `This computer only` binds to `127.0.0.1`; `Local network` binds to `0.0.0.0` so other computers on the same trusted network can connect. |
+| Debug mode       | Passes `--debug` to FlowChem for verbose log output.                                                                                                                              |
+| Simulation mode  | Launches `flowchem-sim` instead of `flowchem`. All device drivers are replaced with simulated counterparts — no physical hardware required.                                       |
+| Start / Stop     | Single toggle button. Starts or stops the server process.                                                                                                                         |
+| Open API browser | Opens `<server address>/docs` in the system browser.                                                                                                                              |
 
 > The address field, server access selector, debug checkbox, and simulation mode checkbox are disabled while the server is running.
 
@@ -124,11 +124,11 @@ Run `flowchem-autodiscover` to detect connected devices and generate a starter c
   <img src="resources/discover.png" alt="Discover tab" width="480"/>
 </p>
 
-| Element | Description |
-|---|---|
+| Element          | Description                                                                             |
+| ---------------- | --------------------------------------------------------------------------------------- |
 | Run autodiscover | Shows a safety warning, then runs `flowchem-autodiscover`. Output streams in real time. |
-| Output area | Read-only display of autodiscover stdout and stderr. |
-| Copy to editor | Copies the output into the Config editor for review and saving. |
+| Output area      | Read-only display of autodiscover stdout and stderr.                                    |
+| Copy to editor   | Copies the output into the Config editor for review and saving.                         |
 
 > **Warning:** autodiscovery communicates over serial ports and may place unsupported devices in an unsafe state. A confirmation dialog is shown before running.
 >
@@ -140,12 +140,12 @@ Run `flowchem-autodiscover` to detect connected devices and generate a starter c
 
 Live log viewer — always accessible, even while the server is running.
 
-| Element | Description |
-|---|---|
-| Log area | Streams output from the FlowChem server process and internal GUI events. Auto-scrolls to the latest entry. |
+| Element    | Description                                                                                                                                                                                                                                                                                 |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Log area   | Streams output from the FlowChem server process and internal GUI events. Auto-scrolls to the latest entry.                                                                                                                                                                                  |
 | Auto-save… | Opens a dialog to choose where and under which name to save the log. Everything already in the log area is written immediately, and every new message is appended to the file as it arrives. Click **Stop auto-save** to stop. Auto-save is not remembered after the application is closed. |
-| Saving to | Shows the file currently receiving the log output. |
-| Clear | Clears the log area. The auto-save file is not affected. |
+| Saving to  | Shows the file currently receiving the log output.                                                                                                                                                                                                                                          |
+| Clear      | Clears the log area. The auto-save file is not affected.                                                                                                                                                                                                                                    |
 
 ---
 
@@ -159,9 +159,9 @@ the existing window; options passed to the second launch are ignored.
 
 Right-click the tray icon to access:
 
-| Menu item | Description |
-|---|---|
-| Show window | Brings the main window back to the foreground. |
+| Menu item    | Description                                                                 |
+| ------------ | --------------------------------------------------------------------------- |
+| Show window  | Brings the main window back to the foreground.                              |
 | Start server | Starts the FlowChem server (uses the config path set in the Config editor). |
-| Stop server | Stops the running server. |
-| Quit | Fully exits the application. |
+| Stop server  | Stops the running server.                                                   |
+| Quit         | Fully exits the application.                                                |

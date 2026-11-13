@@ -4,7 +4,6 @@ import os
 import subprocess  # nosec B404 - used only to run a fixed, hardcoded PowerShell command below
 from pathlib import Path
 
-
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 LAUNCHER_NAME = "flowchem-qt.bat"
 SHORTCUT_NAME = "FlowChem Qt.lnk"

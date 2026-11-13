@@ -1,56 +1,71 @@
-from pathlib import Path
 import tomllib
-
+from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
+_RUNTIME_SOURCE_PATHS = [
+    PROJECT_ROOT / "main.py",
+    PROJECT_ROOT / "scripts" / "generate_icon.py",
+    *sorted((PROJECT_ROOT / "app").rglob("*.py")),
+]
 
-def test_runtime_sources_do_not_import_pyside6():
-    source_paths = [
-        PROJECT_ROOT / "main.py",
-        PROJECT_ROOT / "scripts" / "generate_icon.py",
-        *sorted((PROJECT_ROOT / "app").rglob("*.py")),
-    ]
+
+def test_runtime_sources_do_not_import_pyqt_bindings():
+    forbidden = ["PyQt5", "PyQt6", "pyqtSignal"]
 
     offenders = [
-        str(path.relative_to(PROJECT_ROOT))
-        for path in source_paths
-        if "PySide6" in path.read_text(encoding="utf-8")
+        f"{path.relative_to(PROJECT_ROOT)}: {token}"
+        for path in _RUNTIME_SOURCE_PATHS
+        for token in forbidden
+        if token in path.read_text(encoding="utf-8")
     ]
 
     assert offenders == []
 
 
-def test_runtime_sources_do_not_use_qt6_scoped_enums():
-    source_paths = [
-        PROJECT_ROOT / "main.py",
-        PROJECT_ROOT / "scripts" / "generate_icon.py",
-        *sorted((PROJECT_ROOT / "app").rglob("*.py")),
-    ]
-    qt6_only_patterns = [
-        "ActivationReason.",
-        "Format.",
-        "OpenModeFlag.",
-        "ProcessError.",
-        "ProcessState.",
-        "StandardButton.",
+def test_runtime_sources_use_qt6_scoped_enums():
+    # PySide6 (Qt 6) requires scoped enums. These bare (PyQt5-style) member
+    # accesses, plus the unscoped QMessageBox constants, would break at runtime.
+    forbidden_members = [
+        "QProcess.FailedToStart",
+        "QProcess.Crashed",
+        "QProcess.Timedout",
+        "QProcess.WriteError",
+        "QProcess.ReadError",
+        "QProcess.UnknownError",
+        "QProcess.Running",
+        "QLocalServer.UserAccessOption",
+        "QLockFile.PermissionError",
+        "QLockFile.UnknownError",
+        "QSystemTrayIcon.DoubleClick",
+        "QFileDialog.ShowDirsOnly",
+        "QImage.Format_ARGB32_Premultiplied",
+        "QPainter.Antialiasing",
+        "QPainter.SmoothPixmapTransform",
+        "QIODevice.WriteOnly",
     ]
 
     offenders = [
-        f"{path.relative_to(PROJECT_ROOT)}: {pattern}"
-        for path in source_paths
-        for pattern in qt6_only_patterns
-        if pattern in path.read_text(encoding="utf-8")
+        f"{path.relative_to(PROJECT_ROOT)}: {member}"
+        for path in _RUNTIME_SOURCE_PATHS
+        for member in forbidden_members
+        if member in path.read_text(encoding="utf-8")
     ]
 
     assert offenders == []
 
 
-def test_pyproject_uses_pyqt5_dependencies():
+def test_pyproject_uses_pyside6_dependencies():
     data = tomllib.loads((PROJECT_ROOT / "pyproject.toml").read_text(encoding="utf-8"))
     dependencies = data["project"]["dependencies"]
 
-    assert "PyQt5>=5.15.11" in dependencies
-    assert "PyQt-Fluent-Widgets>=1.11.2" in dependencies
-    assert not any(dependency.startswith("PySide6") for dependency in dependencies)
-    assert not any(dependency.startswith("PyQt6") for dependency in dependencies)
+    assert any(dependency.startswith("PySide6") for dependency in dependencies)
+    assert any(
+        dependency.startswith("PySide6-Fluent-Widgets") for dependency in dependencies
+    )
+    assert not any(
+        dependency.startswith(("PyQt5", "PyQt6")) for dependency in dependencies
+    )
+    assert not any(
+        "PyQt" in dependency and "Fluent" in dependency for dependency in dependencies
+    )

@@ -1,7 +1,8 @@
 from pathlib import Path
 
-from PyQt5.QtCore import QSettings
-from PyQt5.QtWidgets import (
+from loguru import logger
+from PySide6.QtCore import QSettings
+from PySide6.QtWidgets import (
     QFileDialog,
     QHBoxLayout,
     QMessageBox,
@@ -10,7 +11,6 @@ from PyQt5.QtWidgets import (
     QWidget,
 )
 from qfluentwidgets import LineEdit, PrimaryPushButton, PushButton
-from loguru import logger
 
 _TOML_FILTER = "TOML files (*.toml);;All files (*)"
 
@@ -52,7 +52,7 @@ class ConfigTab(QWidget):
         saved = self._settings.value("config_path", "")
         if saved:
             try:
-                saved_path = Path(saved)
+                saved_path = Path(str(saved))
                 if saved_path.exists():
                     self.path_edit.setText(str(saved_path))
                     self._load()

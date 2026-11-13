@@ -2,8 +2,8 @@ import os
 
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
-from PyQt5.QtGui import QPalette
-from PyQt5.QtWidgets import QApplication
+from PySide6.QtGui import QPalette
+from PySide6.QtWidgets import QApplication
 from qfluentwidgets import Theme, qconfig
 
 from app.main_window import MainWindow

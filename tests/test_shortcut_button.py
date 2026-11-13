@@ -4,11 +4,11 @@ from pathlib import Path
 
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
-from PyQt5.QtWidgets import QApplication, QFileDialog, QMessageBox
+from PySide6.QtWidgets import QApplication, QFileDialog, QMessageBox
 
-import app.main_window as main_window
+from app import main_window
 from app.main_window import MainWindow
-from app.windows_launcher import LauncherBuildError, SHORTCUT_NAME
+from app.windows_launcher import SHORTCUT_NAME, LauncherBuildError
 
 _APP = None
 

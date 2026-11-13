@@ -7,8 +7,8 @@ import uuid
 
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
-from PyQt5.QtCore import QLockFile
-from PyQt5.QtWidgets import QApplication
+from PySide6.QtCore import QLockFile
+from PySide6.QtWidgets import QApplication
 
 from app.single_instance import (
     InstanceStatus,
@@ -62,6 +62,7 @@ def test_secondary_instance_notifies_primary(tmp_path):
     primary.activation_requested.connect(lambda: activations.append(True))
 
     def notify_primary():
+        time.sleep(0.1)  # Give primary time to fully initialize
         secondary = SingleInstanceCoordinator(server_name, lock_path)
         statuses.append(secondary.start())
         secondary.close()
@@ -103,7 +104,7 @@ def test_stale_lock_is_recovered_before_listening(tmp_path):
     lock_path = tmp_path / "instance.lock"
     script = (
         "import os, sys\n"
-        "from PyQt5.QtCore import QLockFile\n"
+        "from PySide6.QtCore import QLockFile\n"
         "lock = QLockFile(sys.argv[1])\n"
         "lock.setStaleLockTime(0)\n"
         "assert lock.tryLock(0)\n"

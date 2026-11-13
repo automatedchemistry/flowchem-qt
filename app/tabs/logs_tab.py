@@ -3,8 +3,9 @@ from datetime import datetime
 from pathlib import Path
 from typing import TextIO
 
-from PyQt5.QtCore import QSettings, QStandardPaths, QTimer
-from PyQt5.QtWidgets import (
+from loguru import logger
+from PySide6.QtCore import QSettings, QStandardPaths, QTimer
+from PySide6.QtWidgets import (
     QFileDialog,
     QHBoxLayout,
     QLabel,
@@ -14,7 +15,6 @@ from PyQt5.QtWidgets import (
     QWidget,
 )
 from qfluentwidgets import PushButton
-from loguru import logger
 
 _LOG_FILTER = "Log files (*.log);;Text files (*.txt);;All files (*)"
 
@@ -139,10 +139,12 @@ class LogsTab(QWidget):
     def _select_autosave_path(self) -> Path | None:
         folder = (
             self._settings.value("log_dir", "")
-            or QStandardPaths.writableLocation(QStandardPaths.DocumentsLocation)
+            or QStandardPaths.writableLocation(
+                QStandardPaths.StandardLocation.DocumentsLocation
+            )
             or str(Path.home())
         )
-        default = Path(folder) / f"flowchem_{datetime.now():%Y%m%d_%H%M%S}.log"
+        default = Path(str(folder)) / f"flowchem_{datetime.now():%Y%m%d_%H%M%S}.log"
         path, _ = QFileDialog.getSaveFileName(
             self, "Auto-save logs to", str(default), _LOG_FILTER
         )

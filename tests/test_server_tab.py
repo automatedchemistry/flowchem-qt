@@ -2,8 +2,8 @@ import os
 
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
-from PyQt5.QtCore import QObject, pyqtSignal
-from PyQt5.QtWidgets import QApplication
+from PySide6.QtCore import QObject, Signal
+from PySide6.QtWidgets import QApplication
 
 from app.tabs.server_tab import ServerTab
 
@@ -19,8 +19,8 @@ class FakeConfigTab:
 
 
 class FakeServerManager(QObject):
-    started = pyqtSignal()
-    stopped = pyqtSignal(int)
+    started = Signal()
+    stopped = Signal(int)
 
     def __init__(self):
         super().__init__()

@@ -3,7 +3,7 @@ from subprocess import CompletedProcess
 
 import pytest
 
-import app.windows_launcher as windows_launcher
+from app import windows_launcher
 from app.windows_launcher import ShortcutBuildError, create_windows_shortcut
 
 
