@@ -1,5 +1,5 @@
-from PyQt5.QtCore import QObject, QProcess, QTimer, pyqtSignal
 from loguru import logger
+from PyQt5.QtCore import QObject, QProcess, QTimer, pyqtSignal
 
 _PROC_ERRORS = {
     QProcess.FailedToStart: "Failed to start — is 'flowchem' on your PATH?",
@@ -34,8 +34,13 @@ class ServerManager(QObject):
         sim: bool = False,
         host: str = "127.0.0.1",
     ):
-        exe = "flowchem-sim" if sim else "flowchem"
-        args = [config_path, "--host", host] + (["--debug"] if debug else [])
+        exe = "uv"
+        args = (
+            ["run"]
+            + ["flowchem-sim" if sim else "flowchem"]
+            + [config_path, "--host", host]
+            + (["--debug"] if debug else [])
+        )
         logger.info(f"Starting: {exe} {' '.join(args)}")
         self._proc.start(exe, args)
 
